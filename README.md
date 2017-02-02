@@ -1,2 +1,2 @@
 # phptable
-Class wor forking with table in PHP, select, where
+Class for working with virtual table in PHP, select, where
