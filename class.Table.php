@@ -21,9 +21,15 @@ class Table {
             $this->table[$headerName][] = $value;
     }
 
-    public function select() {
+    public function select($keysStr='') {
         
-        $arrayHeaderName = array_keys($this->table);
+        if($keysStr=='')
+            $arrayHeaderName = array_keys($this->table);
+        else {
+            $arrayHeaderName = explode(",",$keysStr);
+        }
+     
+       
        
         foreach ($arrayHeaderName as $item) {
             $this->tempArray[$item] = $this->table[$item];
@@ -56,6 +62,14 @@ class Table {
                         }
                     }
                     break;
+                    
+                case '!=':
+                    if($item == $value ) {
+                        foreach($arrayHeaderName as $header) {
+                            unset($this->tempArray[$header][$index]);
+                        }
+                    }
+                    break;
             }
         }
 
@@ -63,13 +77,22 @@ class Table {
     }
     
     public function result() {
-        return $this->tempArray;
+        
+        $temp = array();
+        
+        $arrayHeaderName = array_keys($this->tempArray);
+        foreach($arrayHeaderName as $headerName) {
+            foreach ($this->tempArray[$headerName] as $index => $item) {
+                $temp[$index][$headerName] = $item;
+            }
+        }
+        return $temp;
     }
 
 }
 
 // Test
-
+/*
 $table = new Table();
 $table->createHeader(array('id', 'user_id', 'price', 'date'));
 $table->addCell('id', 1);
@@ -86,4 +109,5 @@ $res = $table->select()->where('id', '>', 1)->result();
 
 
 print_r($res);
-?>
+ * 
+ */
